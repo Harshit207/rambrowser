@@ -53,7 +53,8 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
           <HardDrive className="w-5 h-5 text-blue-600" />
           <h3 className="font-semibold text-gray-900">USB Profiles</h3>
         </div>
-        <p className="text-xs text-gray-600">Load a profile to activate logins & cookies in RAM</p>
+        <p className="text-xs text-gray-600 mb-2">Load a profile to activate logins & cookies in RAM</p>
+        <p className="text-xs text-gray-500 italic">💡 Or browse without one, sign in on websites, then save as new profile</p>
       </div>
 
       {/* Current Profile */}

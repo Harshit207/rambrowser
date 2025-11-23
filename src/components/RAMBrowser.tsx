@@ -44,6 +44,19 @@ export const RAMBrowser: React.FC = () => {
           : t
       )
     );
+
+    // Simulate cookies being created from website login
+    if (url.includes('gmail') || url.includes('google')) {
+      setSessionCookies((prev) => ({
+        ...prev,
+        gmail_session: 'session_' + Math.random().toString(36).substr(2, 9),
+      }));
+    } else if (url.includes('github')) {
+      setSessionCookies((prev) => ({
+        ...prev,
+        github_user: 'logged_in_' + Math.random().toString(36).substr(2, 9),
+      }));
+    }
   }, [activeTabId]);
 
   const handleProfileSelect = (profile: UserProfile) => {
@@ -61,19 +74,48 @@ export const RAMBrowser: React.FC = () => {
   };
 
   const handleExportSession = () => {
+    let profileName = loadedProfile?.username || 'new_profile';
+    let email = loadedProfile?.email || '';
+    
+    if (!loadedProfile) {
+      const inputName = prompt('Enter a profile name to save this session:', 'my_profile');
+      if (!inputName) return;
+      profileName = inputName;
+      const inputEmail = prompt('Enter email for this profile:', 'user@example.com');
+      email = inputEmail || 'user@example.com';
+    }
+
+    const newProfile: UserProfile = loadedProfile || {
+      id: `profile-${Date.now()}`,
+      username: profileName,
+      email: email,
+      createdAt: Date.now(),
+      lastModified: Date.now(),
+      cookies: Object.entries(sessionCookies).map(([name, value]) => ({
+        name,
+        value,
+        domain: 'example.com',
+        path: '/',
+        httpOnly: false,
+        secure: true,
+      })),
+      settings: { theme: 'light', language: 'en' },
+      bookmarks: tabs.map((t) => ({ title: t.title, url: t.url })),
+    };
+
     const sessionData = {
-      profile: loadedProfile,
+      profile: newProfile,
       browsedSites: tabs.map((t) => t.url),
-      sessionCookies,
       exportedAt: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(sessionData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `browser_session_${Date.now()}.json`;
+    a.download = `${profileName}_profile.json`;
     a.click();
     URL.revokeObjectURL(url);
+    alert(`Profile "${profileName}" saved! Copy this file to your USB drive.`);
   };
 
   const handleClearRAM = () => {
