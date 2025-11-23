@@ -38,25 +38,36 @@ export const RAMBrowser: React.FC = () => {
   }, [activeTabId]);
 
   const handleNavigate = useCallback((url: string) => {
-    setTabs((prev) =>
-      prev.map((t) =>
-        t.id === activeTabId
-          ? { ...t, url, title: new URL(url).hostname, isLoading: false }
-          : t
-      )
-    );
+    try {
+      const hostname = new URL(url).hostname;
+      setTabs((prev) =>
+        prev.map((t) =>
+          t.id === activeTabId
+            ? { ...t, url, title: hostname || 'Tab', isLoading: false }
+            : t
+        )
+      );
 
-    // Simulate cookies being created from website login
-    if (url.includes('gmail') || url.includes('google')) {
-      setSessionCookies((prev) => ({
-        ...prev,
-        gmail_session: 'session_' + Math.random().toString(36).substr(2, 9),
-      }));
-    } else if (url.includes('github')) {
-      setSessionCookies((prev) => ({
-        ...prev,
-        github_user: 'logged_in_' + Math.random().toString(36).substr(2, 9),
-      }));
+      // Simulate cookies being created from website login
+      if (url.includes('gmail.com') || url.includes('google.com')) {
+        setSessionCookies((prev) => ({
+          ...prev,
+          ['gmail_session_' + Date.now()]: 'session_' + Math.random().toString(36).substr(2, 9),
+        }));
+      } else if (url.includes('github.com')) {
+        setSessionCookies((prev) => ({
+          ...prev,
+          ['github_user_' + Date.now()]: 'logged_in_' + Math.random().toString(36).substr(2, 9),
+        }));
+      } else {
+        // Create a generic cookie for any website
+        setSessionCookies((prev) => ({
+          ...prev,
+          ['session_' + Date.now()]: 'cookie_' + Math.random().toString(36).substr(2, 9),
+        }));
+      }
+    } catch (e) {
+      console.error('Invalid URL:', e);
     }
   }, [activeTabId]);
 
@@ -158,7 +169,7 @@ export const RAMBrowser: React.FC = () => {
             title="Export session to USB"
           >
             <Download className="w-4 h-4" />
-            Save Session
+            Save Session ({Object.keys(sessionCookies).length} cookies)
           </button>
           <button
             onClick={handleClearRAM}

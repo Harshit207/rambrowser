@@ -59,10 +59,10 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
       {/* Tab Bar */}
       <div className="bg-white border-b border-gray-200 flex items-center gap-1 px-2 py-1 overflow-x-auto">
         {tabs.map((tab) => (
-          <button
+          <div
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-t-lg border-l border-r border-t transition whitespace-nowrap max-w-xs ${
+            className={`flex items-center gap-2 px-3 py-2 rounded-t-lg border-l border-r border-t transition whitespace-nowrap max-w-xs cursor-pointer ${
               activeTabId === tab.id
                 ? 'bg-white border-gray-300 text-gray-900'
                 : 'bg-gray-100 border-gray-200 text-gray-600 hover:bg-gray-50'
@@ -79,7 +79,7 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
             >
               <X className="w-3 h-3" />
             </button>
-          </button>
+          </div>
         ))}
         <button
           onClick={onNewTab}
