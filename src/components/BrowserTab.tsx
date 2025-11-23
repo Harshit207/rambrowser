@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Globe, Lock, ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react';
+import { X, Plus, Globe, Lock, ArrowLeft, ArrowRight, RotateCcw, Search } from 'lucide-react';
 
 export interface Tab {
   id: string;
@@ -114,17 +114,29 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
             </button>
           </div>
 
-          <form onSubmit={handleNavigate} className="flex-1">
-            <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow">
+          <form onSubmit={handleNavigate} className="flex-1 flex items-center gap-2">
+            <div className="flex-1 flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg border border-gray-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow">
               {hasProfile && <Lock className="w-4 h-4 text-green-500" title="Profile loaded - cookies active" />}
               <input
                 type="text"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleNavigate(e as unknown as React.FormEvent);
+                  }
+                }}
                 placeholder="Enter URL or search..."
                 className="flex-1 bg-transparent outline-none text-sm"
               />
             </div>
+            <button
+              type="submit"
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded"
+              title="Go"
+            >
+              <Search className="w-4 h-4" />
+            </button>
           </form>
 
           {!hasProfile && (
