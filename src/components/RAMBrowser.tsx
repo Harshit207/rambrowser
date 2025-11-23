@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Shield, Download, Trash2 } from 'lucide-react';
+import { Shield, Download, Trash2, Menu } from 'lucide-react';
 import { BrowserTab, Tab } from './BrowserTab';
 import { ProfileSelector } from './ProfileSelector';
 import { UserProfile } from '../types/profile';
@@ -11,6 +11,7 @@ export const RAMBrowser: React.FC = () => {
   const [activeTabId, setActiveTabId] = useState('1');
   const [loadedProfile, setLoadedProfile] = useState<UserProfile | null>(null);
   const [sessionCookies, setSessionCookies] = useState<Record<string, string>>({});
+  const [showProfileSelector, setShowProfileSelector] = useState(true);
 
   const handleNewTab = useCallback(() => {
     const newId = String(Date.now());
@@ -127,6 +128,12 @@ export const RAMBrowser: React.FC = () => {
     }
   };
 
+  const handleCreateNewProfile = () => {
+    setLoadedProfile(null);
+    setSessionCookies({});
+    setShowProfileSelector(false);
+  };
+
   return (
     <div className="h-screen flex flex-col bg-gray-900">
       {/* Top Control Bar */}
@@ -137,6 +144,14 @@ export const RAMBrowser: React.FC = () => {
           <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">Zero Disk • Profile Protected</span>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowProfileSelector(!showProfileSelector)}
+            className="flex items-center gap-2 px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition text-sm"
+            title="Show/hide profiles"
+          >
+            <Menu className="w-4 h-4" />
+            Profiles
+          </button>
           <button
             onClick={handleExportSession}
             className="flex items-center gap-2 px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm"
@@ -173,11 +188,15 @@ export const RAMBrowser: React.FC = () => {
       </div>
 
       {/* Profile Selector */}
-      <ProfileSelector
-        loadedProfile={loadedProfile}
-        onProfileSelect={handleProfileSelect}
-        onProfileUnload={handleProfileUnload}
-      />
+      {showProfileSelector && (
+        <ProfileSelector
+          loadedProfile={loadedProfile}
+          onProfileSelect={handleProfileSelect}
+          onProfileUnload={handleProfileUnload}
+          onClose={() => setShowProfileSelector(false)}
+          onCreateNew={handleCreateNewProfile}
+        />
+      )}
     </div>
   );
 };

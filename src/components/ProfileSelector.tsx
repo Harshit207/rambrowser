@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { HardDrive, Upload, Lock, LogOut } from 'lucide-react';
+import { HardDrive, Upload, Lock, LogOut, X, Plus } from 'lucide-react';
 import { UserProfile } from '../types/profile';
 
 interface ProfileSelectorProps {
   loadedProfile: UserProfile | null;
   onProfileSelect: (profile: UserProfile) => void;
   onProfileUnload: () => void;
+  onClose: () => void;
+  onCreateNew: () => void;
 }
 
 export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
   loadedProfile,
   onProfileSelect,
   onProfileUnload,
+  onClose,
+  onCreateNew,
 }) => {
   const [profiles] = useState<UserProfile[]>([
     {
@@ -49,9 +53,18 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
     <div className="fixed top-4 right-4 bg-white rounded-lg shadow-lg border border-gray-200 w-80 max-h-96 flex flex-col overflow-hidden z-50">
       {/* Header */}
       <div className="border-b border-gray-200 p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <HardDrive className="w-5 h-5 text-blue-600" />
-          <h3 className="font-semibold text-gray-900">USB Profiles</h3>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <HardDrive className="w-5 h-5 text-blue-600" />
+            <h3 className="font-semibold text-gray-900">USB Profiles</h3>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 p-1"
+            title="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
         <p className="text-xs text-gray-600 mb-2">Load a profile to activate logins & cookies in RAM</p>
         <p className="text-xs text-gray-500 italic">💡 Or browse without one, sign in on websites, then save as new profile</p>
@@ -98,8 +111,15 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = ({
         ))}
       </div>
 
-      {/* Upload */}
-      <div className="border-t border-gray-200 p-3">
+      {/* Actions */}
+      <div className="border-t border-gray-200 p-3 space-y-2">
+        <button
+          onClick={onCreateNew}
+          className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-green-50 text-green-700 rounded text-sm font-medium hover:bg-green-100 transition"
+        >
+          <Plus className="w-4 h-4" />
+          Create New Profile
+        </button>
         <label className="flex items-center justify-center gap-2 w-full px-3 py-2 bg-blue-50 text-blue-600 rounded text-sm font-medium hover:bg-blue-100 cursor-pointer transition">
           <Upload className="w-4 h-4" />
           Upload Profile
