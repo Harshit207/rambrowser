@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { MemoryProcess } from './useRAMData';
 
 interface ProcessListProps {
