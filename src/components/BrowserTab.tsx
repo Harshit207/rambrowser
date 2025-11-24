@@ -148,23 +148,16 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-auto bg-white">
+      <div className="flex-1 overflow-hidden bg-white relative">
         {activeTab ? (
-          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-            <Globe className="w-16 h-16 mb-4 opacity-20" />
-            <p className="text-lg font-semibold mb-2">Browser Preview</p>
-            <p className="text-sm max-w-md text-center">
-              {hasProfile
-                ? `Browsing as logged-in user with profile loaded in RAM\n\nURL: ${activeTab.url}`
-                : `No profile loaded. Sign in on websites to create sessions.\n\nURL: ${activeTab.url}`}
-            </p>
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg max-w-md text-center text-xs text-gray-500">
-              <p className="font-semibold mb-2">Demo Mode</p>
-              <p>
-                All browsing data, cookies, and logins are stored in RAM only. Nothing touches your disk until you export your session.
-              </p>
-            </div>
-          </div>
+          <iframe
+            key={activeTab.id}
+            src={activeTab.url}
+            className="w-full h-full border-0"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-storage-access-by-user-activation"
+            allow="accelerometer; autoplay; camera; encrypted-media; fullscreen; geolocation; gyroscope; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+            title={activeTab.title || 'Browser Tab'}
+          />
         ) : null}
       </div>
     </div>
