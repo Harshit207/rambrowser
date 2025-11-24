@@ -38,7 +38,7 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
 
   const getRenderedUrl = (url: string): string => {
     const encodedUrl = encodeURIComponent(url);
-    return `https://render.allesedv.com/?url=${encodedUrl}`;
+    return `https://www.proxify.app/?q=${encodedUrl}`;
   };
 
   const handleNavigate = (e: React.FormEvent) => {
