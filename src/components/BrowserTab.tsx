@@ -36,9 +36,9 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
   const [urlInput, setUrlInput] = useState('');
   const activeTab = tabs.find((t) => t.id === activeTabId);
 
-  const getProxiedUrl = (url: string): string => {
-    const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-    return corsProxy + url;
+  const getRenderedUrl = (url: string): string => {
+    const encodedUrl = encodeURIComponent(url);
+    return `https://render.allesedv.com/?url=${encodedUrl}`;
   };
 
   const handleNavigate = (e: React.FormEvent) => {
@@ -157,9 +157,8 @@ export const BrowserTab: React.FC<BrowserTabProps> = ({
         {activeTab ? (
           <iframe
             key={activeTab.id}
-            src={getProxiedUrl(activeTab.url)}
+            src={getRenderedUrl(activeTab.url)}
             className="w-full h-full border-0"
-            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-storage-access-by-user-activation"
             allow="accelerometer; autoplay; camera; encrypted-media; fullscreen; geolocation; gyroscope; microphone; midi; payment; usb; vr; xr-spatial-tracking"
             title={activeTab.title || 'Browser Tab'}
           />
